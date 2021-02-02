@@ -111,8 +111,8 @@ class ynabData:
 
             now = datetime.now()
 
-            this_month = now.strftime("%y-%m-01")
-            last_month = (now - timedelta(weeks=4)).strftime("%y-%m-01")
+            this_month = now.strftime("%Y-%m-01")
+            last_month = (now - timedelta(weeks=4)).strftime("%Y-%m-01")
 
             for m in self.get_data.months:
                 _LOGGER.debug("Current month: %s", m.month)
