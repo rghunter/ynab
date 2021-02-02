@@ -50,6 +50,14 @@ class ynabSensor(Entity):
             "total_balance"
         )
 
+        self.attr["earned_last_month"] = self.hass.data[DOMAIN_DATA].get(
+            "earned_last_month"
+        )
+
+        self.attr["age_of_money"] = self.hass.data[DOMAIN_DATA].get(
+            "age_of_money"
+        )
+
         self.attr["need_approval"] = self.hass.data[DOMAIN_DATA].get("need_approval")
 
         self.attr["uncleared_transactions"] = self.hass.data[DOMAIN_DATA].get(
