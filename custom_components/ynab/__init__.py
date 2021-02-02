@@ -2,7 +2,7 @@
 
 import logging
 import os
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from ynab_sdk import YNAB
 
 import homeassistant.helpers.config_validation as cv
@@ -109,31 +109,38 @@ class ynabData:
             )
             self.get_data = self.raw_budget.data.budget
 
-            # Get age of money
-            self.hass.data[DOMAIN_DATA]["age_of_money"] = (
-                self.get_data.months[0].age_of_money
-            )
-            _LOGGER.debug(
-                "Recieved data for: age of money: %s",
-                (self.get_data.months[0].age_of_money)
-            )
-            # Get earned last month
-            self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
-                    self.get_data.months[1].income
-            )
-            _LOGGER.debug(
-                "Recieved data for: earned_last_month: %s",
-                (self.get_data.months[1].income),
-            )
+            now = datetime.now()
 
-            # get to be budgeted data
-            self.hass.data[DOMAIN_DATA]["to_be_budgeted"] = (
-                    self.get_data.months[0].to_be_budgeted / 1000
-            )
-            _LOGGER.debug(
-                "Recieved data for: to be budgeted: %s",
-                (self.get_data.months[0].to_be_budgeted / 1000),
-            )
+            this_month = now.strftime("%y-%m-01")
+            last_month = (now - timedelta(months=1)).strftime("%y-%m-01")
+
+            for m in self.get_data.months:
+                if m.month == this_month:
+                    # Get age of money
+                    self.hass.data[DOMAIN_DATA]["age_of_money"] = (
+                        m.age_of_money
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: age of money: %s",
+                        (m.age_of_money)
+                    )
+                    # get to be budgeted data
+                    self.hass.data[DOMAIN_DATA]["to_be_budgeted"] = (
+                            m.to_be_budgeted / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: to be budgeted: %s",
+                        (m.to_be_budgeted / 1000),
+                    )
+                elif m.month == last_month:
+                    # Get earned last month
+                    self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
+                            m.income / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: earned_last_month: %s",
+                        (m.income / 1000),
+                    )
 
             # get unapproved transactions
             unapproved_transactions = len(
