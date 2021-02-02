@@ -119,7 +119,6 @@ class ynabData:
                 _LOGGER.debug("this_month: %s", this_month)
                 _LOGGER.debug("last month: %s", last_month)
                 if m.month == this_month:
-                    _LOGGER.debug("This Month: %s", m.month)
                     # Get age of money
                     self.hass.data[DOMAIN_DATA]["age_of_money"] = (
                         m.age_of_money
