@@ -109,9 +109,26 @@ class ynabData:
             )
             self.get_data = self.raw_budget.data.budget
 
+            # Get age of money
+            self.hass.data[DOMAIN_DATA]["age_of_money"] = (
+                self.get_data.months[0].age_of_money
+            )
+            _LOGGER.debug(
+                "Recieved data for: age of money: %s",
+                (self.get_data.months[0].age_of_money)
+            )
+            # Get earned last month
+            self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
+                    self.get_data.months[1].income / 1000
+            )
+            _LOGGER.debug(
+                "Recieved data for: earned_last_month: %s",
+                (self.get_data.months[1].income / 1000),
+            )
+
             # get to be budgeted data
             self.hass.data[DOMAIN_DATA]["to_be_budgeted"] = (
-                self.get_data.months[0].to_be_budgeted / 1000
+                    self.get_data.months[0].to_be_budgeted / 1000
             )
             _LOGGER.debug(
                 "Recieved data for: to be budgeted: %s",
