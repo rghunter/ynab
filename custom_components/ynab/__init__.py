@@ -112,7 +112,7 @@ class ynabData:
             now = datetime.now()
 
             this_month = now.strftime("%y-%m-01")
-            last_month = (now - timedelta(months=1)).strftime("%y-%m-01")
+            last_month = (now - timedelta(weeks=4)).strftime("%y-%m-01")
 
             for m in self.get_data.months:
                 if m.month == this_month:
