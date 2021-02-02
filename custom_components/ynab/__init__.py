@@ -115,6 +115,7 @@ class ynabData:
             last_month = (now - timedelta(weeks=4)).strftime("%y-%m-01")
 
             for m in self.get_data.months:
+                _LOGGER.debug("Current month: %s", m.month)
                 if m.month == this_month:
                     # Get age of money
                     self.hass.data[DOMAIN_DATA]["age_of_money"] = (
