@@ -119,11 +119,11 @@ class ynabData:
             )
             # Get earned last month
             self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
-                    self.get_data.months[1].income / 1000
+                    self.get_data.months[1].income
             )
             _LOGGER.debug(
                 "Recieved data for: earned_last_month: %s",
-                (self.get_data.months[1].income / 1000),
+                (self.get_data.months[1].income),
             )
 
             # get to be budgeted data
