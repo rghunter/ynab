@@ -79,6 +79,10 @@ class ynabSensor(Entity):
                     category_error = CATEGORY_ERROR.format(category=category)
                     _LOGGER.error(category_error)
 
+        # Custom metric: Budgeted this month vs earned last month
+        self.attr["earned_vs_budgeted"] = self.hass.data[DOMAIN_DATA].get("earned_last_month") -\
+                                       self.attr["budgeted_this_month"]
+
     @property
     def should_poll(self):
         """Return the name of the sensor."""
