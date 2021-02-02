@@ -111,39 +111,24 @@ class ynabData:
 
             now = datetime.now()
 
-            this_month = now.strftime("%Y-%m-01")
-            last_month = (now - timedelta(weeks=4)).strftime("%Y-%m-01")
+            # Get age of money
+            self.hass.data[DOMAIN_DATA]["age_of_money"] = (
+                self.get_data.months[0].age_of_money
+            )
 
-            for m in self.get_data.months:
-                _LOGGER.debug("Current month: %s", m.month)
-                _LOGGER.debug("this_month: %s", this_month)
-                _LOGGER.debug("last month: %s", last_month)
-                if m.month == this_month:
-                    # Get age of money
-                    self.hass.data[DOMAIN_DATA]["age_of_money"] = (
-                        m.age_of_money
-                    )
-                    _LOGGER.debug(
-                        "Recieved data for: age of money: %s",
-                        (m.age_of_money)
-                    )
-                    # get to be budgeted data
-                    self.hass.data[DOMAIN_DATA]["to_be_budgeted"] = (
-                            m.to_be_budgeted / 1000
-                    )
-                    _LOGGER.debug(
-                        "Recieved data for: to be budgeted: %s",
-                        (m.to_be_budgeted / 1000),
-                    )
-                elif m.month == last_month:
-                    # Get earned last month
-                    self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
-                            m.income / 1000
-                    )
-                    _LOGGER.debug(
-                        "Recieved data for: earned_last_month: %s",
-                        (m.income / 1000),
-                    )
+            _LOGGER.debug(
+                "Recieved data for: age of money: %s",
+                (self.get_data.months[0].age_of_money)
+            )
+
+            # get to be budgeted data
+            self.hass.data[DOMAIN_DATA]["to_be_budgeted"] = (
+                    self.get_data.months[0].to_be_budgeted / 1000
+            )
+            _LOGGER.debug(
+                "Recieved data for: to_be_budgeted: %s",
+                (self.get_data.months[0].to_be_budgeted / 1000),
+            )
 
             # get unapproved transactions
             unapproved_transactions = len(
@@ -185,9 +170,16 @@ class ynabData:
 
             # get current month data
             for m in self.get_data.months:
-                if m.month != date.today().strftime("%Y-%m-01"):
-                    continue
-                else:
+                if m.month == (date.today()-timedelta(weeks=4)).strftime("%Y-%m-01"):
+                    # Get earned last month
+                    self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
+                            m.income / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: earned_last_month: %s",
+                        (m.income / 1000),
+                    )
+                if m.month == date.today().strftime("%Y-%m-01"):
                     # budgeted
                     self.hass.data[DOMAIN_DATA]["budgeted_this_month"] = (
                         m.budgeted / 1000
