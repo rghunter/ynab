@@ -111,10 +111,7 @@ class ynabData:
 
             now = datetime.now()
 
-            # Get age of money
-            self.hass.data[DOMAIN_DATA]["age_of_money"] = (
-                self.get_data.months[0].age_of_money
-            )
+
 
             _LOGGER.debug(
                 "Recieved data for: age of money: %s",
@@ -200,6 +197,10 @@ class ynabData:
                     _LOGGER.debug(
                         "Recieved data for: budgeted this month: %s",
                         self.hass.data[DOMAIN_DATA]["budgeted_this_month"],
+                    )
+                    # Get age of money
+                    self.hass.data[DOMAIN_DATA]["age_of_money"] = (
+                        m.age_of_money
                     )
 
                     self.hass.data[DOMAIN_DATA]["earned_this_month"] = (
