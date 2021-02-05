@@ -88,7 +88,7 @@ class ynabSensor(Entity):
         # Custom metric: Budgeted this month vs earned last month
         self.attr["earned_vs_budgeted"] = self.attr["earned_last_month"] - self.attr["budgeted_this_month"]
 
-        self.attr["cash_flow_goal"] = to_be_budgeted - self.attr["earned_this_month"] - self.attr["budgeted_next_month"]
+        self.attr["cash_flow_goal"] = to_be_budgeted - (self.attr["earned_this_month"] - self.attr["budgeted_next_month"])
 
     @property
     def should_poll(self):
