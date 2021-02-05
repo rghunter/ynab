@@ -67,6 +67,9 @@ class ynabSensor(Entity):
         self.attr["overspent_categories"] = self.hass.data[DOMAIN_DATA].get(
             "overspent_categories"
         )
+        self.attr["budgeted_next_month"] = self.hass.data[DOMAIN_DATA].get(
+            "budgeted_next_month"
+        )
 
         # category attributes
         if self._categories is not None:

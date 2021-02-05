@@ -170,8 +170,21 @@ class ynabData:
 
             # get current month data
             for m in self.get_data.months:
-                if m.month == (date.today()-timedelta(weeks=4)).strftime("%Y-%m-01"):
+                if m.month == (date.today() + timedelta(weeks=4)).strftime("%Y-%m-01"):
+                    # next month
                     # Get earned last month
+
+                    self.hass.data[DOMAIN_DATA]["budgeted_next_month"] = (
+                            m.budgeted / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: budgeted_next_month: %s",
+                        (m.budgeted / 1000),
+                    )
+
+                if m.month == (date.today() - timedelta(weeks=4)).strftime("%Y-%m-01"):
+                    # Get earned last month
+
                     self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
                             m.income / 1000
                     )
