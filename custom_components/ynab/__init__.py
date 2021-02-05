@@ -202,6 +202,14 @@ class ynabData:
                         self.hass.data[DOMAIN_DATA]["budgeted_this_month"],
                     )
 
+                    self.hass.data[DOMAIN_DATA]["earned_this_month"] = (
+                            m.income / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: earned_this_month: %s",
+                        (m.income / 1000),
+                    )
+
                     # activity
                     self.hass.data[DOMAIN_DATA]["activity_this_month"] = (
                         m.activity / 1000

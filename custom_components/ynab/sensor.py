@@ -70,6 +70,9 @@ class ynabSensor(Entity):
         self.attr["budgeted_next_month"] = self.hass.data[DOMAIN_DATA].get(
             "budgeted_next_month"
         )
+        self.attr["earned_this_month"] = self.hass.data[DOMAIN_DATA].get(
+            "earned_this_month"
+        )
 
         # category attributes
         if self._categories is not None:
@@ -83,8 +86,9 @@ class ynabSensor(Entity):
                     _LOGGER.error(category_error)
 
         # Custom metric: Budgeted this month vs earned last month
-        self.attr["earned_vs_budgeted"] = self.hass.data[DOMAIN_DATA].get("earned_last_month") -\
-                                       self.attr["budgeted_this_month"]
+        self.attr["earned_vs_budgeted"] = self.attr["earned_last_month"] - self.attr["budgeted_this_month"]
+
+        self.attr["cash_flow_goal"] = to_be_budgeted - self.attr["earned_this_month"] - self.attr["budgeted_next_month"]
 
     @property
     def should_poll(self):
