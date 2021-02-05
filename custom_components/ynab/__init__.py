@@ -10,6 +10,8 @@ from homeassistant.const import CONF_API_KEY
 from homeassistant.helpers import discovery
 from homeassistant.util import Throttle
 
+from dateutil.relativedelta import *
+
 import voluptuous as vol
 
 from .const import (
@@ -165,9 +167,9 @@ class ynabData:
                 (self.hass.data[DOMAIN_DATA]["total_balance"]),
             )
 
-            # get current month data
             for m in self.get_data.months:
-                if m.month == (date.today() + timedelta(weeks=4)).strftime("%Y-%m-01"):
+                # get next months data
+                if m.month == (date.today() + relativedelta(months=+1)).strftime("%Y-%m-01"):
                     # next month
                     # Get earned last month
 
@@ -179,17 +181,8 @@ class ynabData:
                         (m.budgeted / 1000),
                     )
 
-                if m.month == (date.today() - timedelta(weeks=4)).strftime("%Y-%m-01"):
-                    # Get earned last month
-
-                    self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
-                            m.income / 1000
-                    )
-                    _LOGGER.debug(
-                        "Recieved data for: earned_last_month: %s",
-                        (m.income / 1000),
-                    )
-                if m.month == date.today().strftime("%Y-%m-01"):
+                # get current month data
+                elif m.month == date.today().strftime("%Y-%m-01"):
                     # budgeted
                     self.hass.data[DOMAIN_DATA]["budgeted_this_month"] = (
                         m.budgeted / 1000
@@ -244,6 +237,20 @@ class ynabData:
                                 "Recieved data for categories: %s",
                                 [c.name, c.balance / 1000],
                             )
+                # Get Last Months Data
+                elif m.month == (date.today() - relativedelta(months=+1)).strftime("%Y-%m-01"):
+                    # Get earned last month
+
+                    self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
+                            m.income / 1000
+                    )
+                    _LOGGER.debug(
+                        "Recieved data for: earned_last_month: %s",
+                        (m.income / 1000),
+                    )
+
+                else:
+                    continue # we dont care about any of the other months
 
             # print(self.hass.data[DOMAIN_DATA])
         except Exception as error:
