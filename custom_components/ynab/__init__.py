@@ -170,6 +170,7 @@ class ynabData:
             for m in self.get_data.months:
                 # get next months data
                 if m.month == (date.today() + relativedelta(months=+1)).strftime("%Y-%m-01"):
+                    _LOGGER.debug("Retrieving data for next month: %s", m.month)
                     # next month
                     # Get earned last month
 
@@ -183,6 +184,7 @@ class ynabData:
 
                 # get current month data
                 elif m.month == date.today().strftime("%Y-%m-01"):
+                    _LOGGER.debug("Retrieving data for current month: %s", m.month)
                     # budgeted
                     self.hass.data[DOMAIN_DATA]["budgeted_this_month"] = (
                         m.budgeted / 1000
@@ -239,8 +241,9 @@ class ynabData:
                             )
                 # Get Last Months Data
                 elif m.month == (date.today() - relativedelta(months=+1)).strftime("%Y-%m-01"):
-                    # Get earned last month
+                    _LOGGER.debug("Getting last months data: %s", m.month)
 
+                    # Get earned last month
                     self.hass.data[DOMAIN_DATA]["earned_last_month"] = (
                             m.income / 1000
                     )
@@ -250,6 +253,7 @@ class ynabData:
                     )
 
                 else:
+                    _LOGGER.debug("Skipping data retrieval for: %s", m.month)
                     continue # we dont care about any of the other months
 
             # print(self.hass.data[DOMAIN_DATA])
